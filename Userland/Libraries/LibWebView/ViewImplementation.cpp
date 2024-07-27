@@ -490,6 +490,8 @@ static ErrorOr<LexicalPath> save_screenshot(Gfx::ShareableBitmap const& bitmap)
     LexicalPath path { Core::StandardPaths::downloads_directory() };
     path = path.append(TRY(Core::DateTime::now().to_string("screenshot-%Y-%m-%d-%H-%M-%S.png"sv)));
 
+    TRY(Core::System::make_directory(Core::StandardPaths::downloads_directory().string(), 0755));
+
     auto encoded = TRY(Gfx::PNGWriter::encode(*bitmap.bitmap()));
 
     auto dump_file = TRY(Core::File::open(path.string(), Core::File::OpenMode::Write));
